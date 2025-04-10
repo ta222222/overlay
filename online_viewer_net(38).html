@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Overlay on Image</title>
+<style>
+  body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center; /* Centers the container horizontally */
+    align-items: center;    /* Centers the container vertically */
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+  }
+
+  #container {
+    position: relative;
+    text-align: center; /* Centers inline or inline-block children (like the image if it were inline) */
+  }
+
+  #myImage {
+    display: block; /* Prevents extra space below inline elements */
+    max-width: 80%;
+    height: auto;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    transition: filter 0s ease-in-out;
+    margin: 0 auto; /* Centers the block-level image horizontally within its parent */
+  }
+
+  #overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: red;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0s ease-in-out;
+    pointer-events: none; /* Allow clicks to pass through when hidden */
+  }
+
+  .red-filter {
+    filter: sepia(100%) hue-rotate(-10deg) saturate(500%) brightness(100%) contrast(100%);
+  }
+</style>
+</head>
+<body>
+  <div id="container">
+    <img id="myImage" src="https://people.com/thmb/0g2Tu3I92YC_Ky4cbeSikysNfzg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(999x0:1001x2)/amelia-gray-hamlin-2024-met-gala-050624-01f69dccfd24485eb4a5bab1cc85e66a.jpg" alt="Click for Red Overlay">
+    <div id="overlay"></div>
+  </div>
+
+  <script>
+    const img = document.getElementById('myImage');
+    const overlay = document.getElementById('overlay');
+    let isOverlayVisible = false;
+
+    function updateOverlaySize() {
+      const rect = img.getBoundingClientRect();
+      overlay.style.width = `${rect.width}px`;
+      overlay.style.height = `${rect.height}px`;
+      overlay.style.top = `${img.offsetTop}px`;
+      overlay.style.left = `${img.offsetLeft}px`;
+    }
+
+    // Initial sizing of the overlay
+    updateOverlaySize();
+
+    // Update overlay size on window resize (for responsiveness)
+    window.addEventListener('resize', updateOverlaySize);
+
+    img.addEventListener('click', () => {
+      isOverlayVisible = !isOverlayVisible;
+      overlay.style.opacity = isOverlayVisible ? '0.3' : '0';
+      img.classList.toggle('red-filter', isOverlayVisible);
+    });
+  </script>
+</body>
+</html>
